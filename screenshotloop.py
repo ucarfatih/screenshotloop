@@ -32,7 +32,7 @@ screenshot.CreateCompatibleBitmap(img_dc, width, height)
 mem_dc.SelectObject(screenshot)
 
 fname  = "ScreenShot"
-imgEski= np.zeros((1,1))
+imgOld= np.zeros((1,1))
 
 while (1):
     # copy the screen into our memory device context
@@ -41,22 +41,22 @@ while (1):
     signedIntsArray = screenshot.GetBitmapBits(True)
     img = np.frombuffer(signedIntsArray, dtype='uint8')
     img.shape = (height,width,4)
-    if (imgEski.shape!=(1,1)):
-        fark=imgEski - img
-        farks = np.sum(fark)
-        print(farks)
+    if (imgOld.shape!=(1,1)):
+        difference=imgOld - img
+        differences = np.sum(difference)
+        print(differences)
     # save the bitmap to a file
-        if (farks>=100):
+        if (differences>=100):
             screenshot.SaveBitmapFile(mem_dc, 'c:\\...' + datetime.datetime.now().strftime("%H_%M_%S__%b_%d_%Y") +'.jpg')
-            imgEski = img
-        else: #stop the operation
+            imgOld = img
+        else: #stop the operation and alarm
             frequency = 2500  # Set Frequency .. Hertz
             duration = 400  # Set Duration To ... ms
-            winsound.Beep(frequency, duration)
+            winsound.Beep(frequency, duration) 
             break
     else :
         screenshot.SaveBitmapFile(mem_dc,'c:\\...' + datetime.datetime.now().strftime("%H_%M_%S__%b_%d_%Y") + '.jpg')
-        imgEski = img
+        imgOld = img
 
    
 
